@@ -1,19 +1,28 @@
+//console.log(process.argv);
+//node fetcher.js http://www.example.edu/ ./index.html
+
 const request = require('request');
 const fs = require('fs');
 
-const domain = process.argv[2];
+const http = process.argv[2];
 const path = process.argv[3];
 
 
 
+//const content = 'Some content!';
 
-const content = 'Some content!';
-
-fs.writeFile('./index.html', content, err => {
-  if (err) {
-    console.error(err);
+request(http, (error, response, body) => {
+  if (error) {
+    console.log('error:', error); // Print the error if one occurred
   }
-  // file written successfully
+
+  fs.writeFile(`${path}`, body, err => {
+    if (err) {
+      console.error(err);
+    }
+    console.log(`Downloaded and saved ${body.length} bytes to ${path}.`);
+    // file written successfully
+  });
+  
 });
 
-console.log("Downloaded and saved 1235 bytes to ./index.html.");
